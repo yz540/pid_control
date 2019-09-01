@@ -3,6 +3,54 @@ Self-Driving Car Engineer Nanodegree Program
 
 ---
 
+## Reflection
+
+After a drivable trajectory is produced by the path planning stage, 
+control is use to use the steering, throttle and breaks to follow the 
+trajectory. The PID (Proportional-Integral-Derivative) control is one 
+of the most common and fundamental controllers.  The controller aims 
+to reduce the CTE (cross track error, distance of vehicle from trajectory) 
+by combining the three operations. The following PID block diagram
+is from wikipedia [pid controller](https://en.wikipedia.org/wiki/PID_controller),
+the e(t) is the cte in our class, the u(t) is the control variable we
+want to get.
+![PID_block](PID_block.png)
+
+The *P* is propotional to cte, it results the most direct effect on the control, 
+but it tends to overshoot the target hence resulting oscillation around the target.
+The *D* is the temporal derivative of cte and tries to bring the rate of change
+of error down to 0, hence reducing the overshoot of the *P*.
+The *I* is the control of cumulative error over time like sysmetic bias.
+
+The implementation of the PID to control the steering is as follows:
+```cpp
+  d_error = cte - p_error;
+  p_error = cte;
+  i_error += cte;
+  steer_value = - p_error * Kp - i_error * Ki - d_error * Kd	
+```
+
+To choose a proper set of parameters, I tuned Kp first to reach oscillation, then Kd and at last Ki.
+The initial setting is 
+```cpp
+double p[3] = {0.2, 0.0001, 1.5};
+```
+I use the [twiddle method](https://www.youtube.com/watch?v=2uQ2BSzDvXs) 
+in the class to find the local best parameters. I referenced the 
+[article](https://medium.com/intro-to-artificial-intelligence/pid-controller-udacitys-self-driving-car-nanodegree-c4fd15bdc981)
+about how to reset the vehicle position after one set of parameters are run.
+The fine tuned parameters are
+```cpp
+double p[3] = {0.186248, 0.0001, 1.49};
+```
+
+A clip of the simulation video is here.
+![pid_controller](pid_controller.mp4)
+The vehicle managed to run on the road, but not very smoothly. 
+Further improvement can be done on the choice of parameters. 
+I only use 500 steps to tune the parameters.
+Any change of the environment might lead to failure.
+
 ## Dependencies
 
 * cmake >= 3.5
