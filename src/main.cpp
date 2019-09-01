@@ -4,7 +4,7 @@
 #include <string>
 #include "json.hpp"
 #include "PID.h"
-cd 
+
 // for convenience
 using nlohmann::json;
 using std::string;
@@ -35,7 +35,7 @@ int main() {
 
   PID pid;
   /**
-   * TODO: Initialize the pid variable.
+   *  Initialize the pid variable.
    */
 //   double p[3] = {0.2, 0.0001, 1.5};
   double p[3] = {0.186248, 0.0001, 1.49};
@@ -75,10 +75,9 @@ int main() {
           json msgJson;
           msgJson["throttle"] = 0.3;
           /**
-           * TODO: Calculate steering value here, remember the steering value is
+           * Calculate steering value here, remember the steering value is
            *   [-1, 1].
-           * NOTE: Feel free to play around with the throttle and speed.
-           *   Maybe use another PID controller to control the speed!
+           *
            */
           //           Find the best parameters
           if(twiddle){
